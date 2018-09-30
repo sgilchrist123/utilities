@@ -1,6 +1,6 @@
 //TDO
 
 function test() {
-//todo
+	//todo.
 	let str = “”;
 }
