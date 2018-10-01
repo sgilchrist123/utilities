@@ -16,18 +16,15 @@ exports.getAttachmentLinks = (req, res) => {
     
 	//If input URL is already to a PDF, just return it. Otherwise process it.
     if(pageURL.indexOf(".pdf") >= (pageURL.length-4)) {
-		res.send("URL is to a PDF: " + pageURL);
-    } else {
-        //res.send("URL is not to a PDF: " + pageURL);
-    
+		res.send(pageURL);
+    } else {    
     	var request = require('request');
-        request(pageURL, function (error, response, body) {
+        	request(pageURL, function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
             console.log('body:', body.length); // Print the HTML for the Google homepage.
             let linksAsString = getPDFLinks(body);
-            //var obj = { name: "John", age: 30, city: "New York", source: webPageHTML };
-            res.send(JSON.stringify(linksAsString));
+            res.send(linksAsString);
         });
 	
     }
@@ -35,7 +32,6 @@ exports.getAttachmentLinks = (req, res) => {
 };
 
 function getPDFLinks(input) {
-
 
     var linksToPDFs = [];
 
@@ -53,6 +49,6 @@ function getPDFLinks(input) {
       }
       linksToPDFs.push(linkToPDF);
     } 
-    return linksToPDFs.join("; ");
+    return linksToPDFs.join(";");
   }
 
