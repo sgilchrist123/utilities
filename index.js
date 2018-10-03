@@ -1,4 +1,4 @@
-var pageURL;
+let pageURL;
 
 /**
  * HTTP Cloud Function.
@@ -15,15 +15,15 @@ exports.getAttachmentLinks = (req, res) => {
     //TODO - Check if URL is in correct format (eg starts with "http://", if not try to fix)
     
 	//If input URL is already to a PDF, just return it. Otherwise process it.
-    if(pageURL.indexOf(".pdf") >= (pageURL.length-4)) {
+    if(isLinkToPDF(pageURL)) {
 		res.send(pageURL);
     } else {    
-        var request = require('request');
+        const request = require('request');
         request(pageURL, function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
             console.log('body:', body.length); // Print the HTML for the Google homepage.
-            let linksAsString = getPDFLinks(body);
+            const linksAsString = getPDFLinks(body);
             res.send(linksAsString);
         });
 	
@@ -33,14 +33,13 @@ exports.getAttachmentLinks = (req, res) => {
 
 function getPDFLinks(input) {
 
-    var linksToPDFs = [];
+    const linksToPDFs = [];
 
-    //var pdfLink = /href\s*=\s*(['"]*)(https?:\/\/.+\.pdf)\1/g;
-    var pdfLink = /href\s*=\s*(['"]?)((\/|http)[^>]+?\.pdf)\1/ig;
-    var siteURL = pageURL.slice(0,pageURL.indexOf("/",8));
+    const pdfLink = /href\s*=\s*(['"]?)((\/|http)[^>]+?\.pdf)\1/ig;
+    const siteURL = pageURL.slice(0,pageURL.indexOf("/",8));
     
-    var match;
-    var linkToPDF;
+    let match;
+    let linkToPDF;
     while (match = pdfLink.exec(input)) {
       if (match[2].indexOf("/") > 0) {
        linkToPDF = match[2];
@@ -50,5 +49,13 @@ function getPDFLinks(input) {
       linksToPDFs.push(linkToPDF);
     } 
     return linksToPDFs.join(";");
+  }
+
+  function isLinkToPDF(url) {
+    if (url.indexOf(".pdf") >= (url.length-4)){
+        return true;
+    } else {
+      return false;
+    }
   }
 
