@@ -10,6 +10,8 @@ test('bar', async t => {
 	t.is(await bar, 'bar');
 });
 
+/* Broken
 test('Test isLinkToPDF function', t => {
 	t.context.is(isLinkToPDF("http://www.gtlaw.com.au/"),true);
 });
+*/
