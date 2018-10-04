@@ -14,3 +14,9 @@
 .gitignore
 
 node_modules
+
+README.md 
+test*
+package-lock.json
+.eslintrc
+.DS_Store
