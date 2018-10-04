@@ -58,7 +58,8 @@ function getSiteURL(url) {
 
 // TODO - return true even if name of PDF followed by query string
 // TODO - make case insensitive
-function isLinkToPDF(url) {
+function isLinkToPDF(input) {
+  const url = input.toLowerCase().trim();
   if (url.indexOf(".pdf") >= (url.length-4)){
       return true;
   } else {
