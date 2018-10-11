@@ -58,6 +58,32 @@ exports.getPDFText = (req, res) => {
     file: pdfURL
   }).pipe(res);
 };
+/** 
+* HTTP Cloud Function.
+ *
+ * @param {Object} req Cloud Function request context.
+ *                     More info: https://expressjs.com/en/api.html#req
+ * @param {Object} res Cloud Function response context.
+ *                     More info: https://expressjs.com/en/api.html#res
+ */
+exports.getConcepts = (req, res) => {
+
+  const conceptsJSON = req.body.text;
+
+  const concepts = [];
+  
+  const stringRegexp = /"string":"(.+?)"/ig;
+
+  let match;
+
+  while (match = stringRegexp.exec(conceptsJSON)) {
+    concepts.push(match[1]);
+  } 
+  
+	//console.log(concepts.join(";"));
+  res.send(concepts.join(";"));
+  //res.send(conceptsJSON);
+};
 
 
 function getLinks(html) {
