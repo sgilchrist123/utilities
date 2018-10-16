@@ -14,7 +14,7 @@ exports.getAttachmentLinks = (req, res) => {
 	
   //TODO - Check if URL is in correct format (eg starts with "http://", if not try to fix)
     
-	//If input URL is already to a PDF, just return it. Otherwise process it.
+	//If input URL is already to a PDF, just return it. Otherwise process it..
     if(isLinkToPDF(pageURL)) {
 		  res.send(pageURL);
     } else {    
@@ -58,6 +58,8 @@ exports.getPDFText = (req, res) => {
     file: pdfURL
   }).pipe(res);
 };
+
+
 /** 
 * HTTP Cloud Function.
  *
@@ -83,6 +85,64 @@ exports.getConcepts = (req, res) => {
 	//console.log(concepts.join(";"));
   res.send(concepts.join(";"));
   //res.send(conceptsJSON);
+};
+
+
+/** 
+* HTTP Cloud Function.
+ *
+ * @param {Object} req Cloud Function request context.
+ *                     More info: https://expressjs.com/en/api.html#req
+ * @param {Object} res Cloud Function response context.
+ *                     More info: https://expressjs.com/en/api.html#res
+ */
+exports.saveEntity = (req, res) => {
+
+  //const summary = req.body.summary;
+  //const summary = "bah";
+
+  const Datastore = require('@google-cloud/datastore');
+
+  const projectId = req.body.projectId;
+
+  // Creates a client
+  const datastore = new Datastore({
+    projectId: projectId
+  });
+
+  // The kind for the new entity
+  const kind = req.body.kind;
+  // The name/ID for the new entity
+  const ID = req.body.ID;
+
+  const update = req.body.update;
+  // The Cloud Datastore key for the new entity
+  const taskKey = datastore.key([kind, ID]);
+
+  // Prepares the new entity
+  const task = {
+    key: taskKey,
+    data: {
+      Date: update.date,
+      "Full text": update.fullText,
+      Source: update.source,
+      Summary: update.summary,
+      URL: update.url,
+      title: update.title
+    },
+  };
+
+  // Saves the entity
+  datastore
+    .save(task)
+    .then(() => {
+      console.log(`Saved ${task.key.ID}: ${task.data.description}`);
+    })
+    .catch(err => {
+      console.error('ERROR:', err);
+    });
+  
+  res.send('saved');
 };
 
 
