@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google-cloud/datastore": "^2.0.0",
     "cloudconvert": "^1.1.2",
     "request": "^2.88.0"
   },
