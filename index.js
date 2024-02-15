@@ -14,7 +14,7 @@ exports.getAttachmentLinks = (req, res) => {
 	
   //TODO - Check if URL is in correct format (eg starts with "http://", if not try to fix)
     
-	//If input URL is already to a PDF, just return it. Otherwise process it..
+	//If input URL is already to a PDF, just return it. Otherwise process it.
     if(isLinkToPDF(pageURL)) {
 		  res.send(pageURL);
     } else {    
